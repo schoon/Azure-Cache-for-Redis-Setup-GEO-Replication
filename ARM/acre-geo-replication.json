@@ -1,0 +1,236 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "prefix": {
+      "type": "string",
+      "defaultValue": "redisgeek",
+      "minLength": 3,
+      "maxLength": 11
+    },
+    "location1": {
+      "type": "string",
+      "defaultValue": "eastus2",
+      "allowedValues": [
+        "australiaeast",
+        "canadacentral",
+        "centralindia",
+        "centralus",
+        "eastus",
+        "eastus2",
+        "northeurope",
+        "southcentralus",
+        "southeastasia",
+        "uksouth",
+        "westeurope",
+        "westus2"
+      ],
+      "metadata": {
+        "description": "Select region for geo-replication"
+      }
+    },
+    "location2": {
+      "type": "string",
+      "defaultValue": "westus2",
+      "allowedValues": [
+        "australiaeast",
+        "canadacentral",
+        "centralindia",
+        "centralus",
+        "eastus",
+        "eastus2",
+        "northeurope",
+        "southcentralus",
+        "southeastasia",
+        "uksouth",
+        "westeurope",
+        "westus2"
+      ],
+      "metadata": {
+        "description": "Select another region for geo-replication"
+      }
+    },
+    "acre_sku": {
+      "type": "string",
+      "allowedValues": [
+        "Enterprise_E10",
+        "Enterprise_E20",
+        "Enterprise_E50",
+        "Enterprise_E100"
+      ],
+      "defaultValue": "Enterprise_E10",
+      "metadata": {
+        "description": "Select the plan"
+      }
+    },
+    "acre_capacity": {
+      "type": "string",
+      "allowedValues": [
+        "2",
+        "4",
+        "6",
+        "8",
+        "10"
+      ],
+      "defaultValue": "2",
+      "metadata": {
+        "description": "Select the plan size"
+      }
+    },
+    "acre_client_protocol": {
+      "type": "string",
+      "allowedValues": [
+        "AllKeysLFU",
+        "AllKeysLRU",
+        "AllKeysRandom",
+        "NoEviction",
+        "VolatileLFU",
+        "VolatileLRU",
+        "VolatileRandom",
+        "VolatileTTL"
+      ],
+      "defaultValue": "NoEviction",
+      "metadata": {
+        "description": "Eviction Policy"
+      }
+    },
+    "acre_eviction_policy": {
+      "type": "string",
+      "allowedValues": [
+        "Encrypted",
+        "Plaintext"
+      ],
+      "defaultValue": "Encrypted",
+      "metadata": {
+        "description": "Client protocol"
+      }
+    },
+    "acre_cluster_policy": {
+      "type": "string",
+      "allowedValues": [
+        "EnterpriseCluster",
+        "OSSCluster"
+      ],
+      "defaultValue": "EnterpriseCluster",
+      "metadata": {
+        "description": "Clustering policy"
+      }
+    }
+  },
+  "variables": {
+    "default":"/default",
+    "geoReplicationGroupName": "[uniqueString(subscription().id)]",
+    "acre_name_1": "[concat(parameters('prefix'), parameters('location1'),uniqueString(subscription().id))]",
+    "acre_name_2": "[concat(parameters('prefix'), parameters('location2'),uniqueString(subscription().id))]",
+    "acre_1_db_id":"[concat('/subscriptions/',
+    subscription().id,
+    '/resourceGroups/',
+    resourceGroup().name,
+    '/providers/Microsoft.Cache/redisEnterprise/',
+    variables('acre_name_1'),
+    '/databases/default')]",
+    "acre_2_db_id":"[concat('/subscriptions/',
+    subscription().id,
+    '/resourceGroups/',
+    resourceGroup().name,
+    '/providers/Microsoft.Cache/redisEnterprise/',
+    variables('acre_name_2'),
+    '/databases/default')]"
+  },
+  "resources": [
+    {
+      "name": "[variables('acre_name_1')]",
+      "type": "Microsoft.Cache/redisEnterprise",
+      "apiVersion": "2021-02-01-preview",
+      "properties": {},
+      "location": "[parameters('location1')]",
+      "dependsOn": [],
+      "sku": {
+        "name": "[parameters('acre_sku')]",
+        "capacity": "[parameters('acre_capacity')]"
+      },
+      "zones": [
+        "1",
+        "2",
+        "3"
+      ],
+      "tags": {},
+      "resources": [
+        {
+          "name": "[concat(variables('acre_name_1'),variables('default'))]",
+          "type": "Microsoft.Cache/redisEnterprise/databases",
+          "apiVersion": "2021-02-01-preview",
+          "properties": {
+            "clientProtocol": "[parameters('acre_client_protocol')]",
+            "evictionPolicy": "[parameters('acre_eviction_policy')]",
+            "clusteringPolicy": "[parameters('acre_cluster_policy')]",
+            "geoReplication": {
+              "groupNickname": "[variables('geoReplicationGroupName')]",
+              "linkedDatabases": [
+                {
+                  "id": "[variables('acre_1_db_id')]"
+                }
+              ]
+            },
+            "persistence": {
+              "aofEnabled": "false",
+              "rdbEnabled": "false",
+              "aofFrequency": "1s",
+              "rdbFrequency": "1h"
+            }
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Cache/redisEnterprise/',variables('acre_name_1'))]"
+          ],
+          "tags": {}
+        }
+      ]
+    },
+    {
+      "name": "[variables('acre_name_2')]",
+      "type": "Microsoft.Cache/redisEnterprise",
+      "apiVersion": "2021-02-01-preview",
+      "properties": {},
+      "location": "[parameters('location2')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Cache/redisEnterprise', variables('acre_name_1'))]"
+      ],
+      "sku": {
+        "name": "[parameters('acre_sku')]",
+        "capacity": "[parameters('acre_capacity')]"
+      },
+      "tags": {},
+      "resources": [
+        {
+          "name": "${acre_name_2}/default",
+          "type": "Microsoft.Cache/redisEnterprise/databases",
+          "apiVersion": "2021-02-01-preview",
+          "properties": {
+            "clientProtocol": "[parameters('acre_client_protocol')]",
+            "evictionPolicy": "[parameters('acre_eviction_policy')]",
+            "clusteringPolicy": "[parameters('acre_cluster_policy')]",
+            "geoReplication": {
+              "groupNickname": "[variables('geoReplicationGroupName')]",
+              "linkedDatabases": [
+                {
+                  "id": "[variables('acre_2_db_id')]"
+                }
+              ]
+            },
+            "persistence": {
+              "aofEnabled": "false",
+              "rdbEnabled": "false",
+              "aofFrequency": "1s",
+              "rdbFrequency": "1h"
+            }
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Cache/redisEnterprise/',variables('acre_name_1'))]",
+            "[resourceId('Microsoft.Cache/redisEnterprise/',variables('acre_name_2'))]"
+          ],
+          "tags": {}
+        }
+      ]
+    }
+  ]
+}
