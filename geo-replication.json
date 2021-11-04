@@ -142,7 +142,7 @@
       "tags": {},
       "resources": [
         {
-          "name": "[variables('acre_name_1')]",
+          "name": "[concat(variables('acre_name_1'),'/default')]",
           "type": "Microsoft.Cache/redisEnterprise/databases",
           "apiVersion": "2021-02-01-preview",
           "properties": {
@@ -165,7 +165,7 @@
             }
           },
           "dependsOn": [
-            "[resourceId(concat('Microsoft.Cache/redisEnterprise/',variables('acre_name_1')))]"
+            "[resourceId('Microsoft.Cache/redisEnterprise/',variables('acre_name_1'))]"
           ],
           "tags": {}
         }
@@ -178,7 +178,7 @@
       "properties": {},
       "location": "[parameters('Region2')]",
       "dependsOn": [
-        "[resourceId(concat('Microsoft.Cache/redisEnterprise', variables('acre_name_1')))]"
+        "[resourceId('Microsoft.Cache/redisEnterprise', variables('acre_name_1'))]"
       ],
       "sku": {
         "name": "[parameters('Plan')]",
@@ -192,7 +192,7 @@
       "tags": {},
       "resources": [
         {
-          "name": "[variables('acre_name_2')]",
+          "name": "[concat(variables('acre_name_2'),'/default')]",
           "type": "Microsoft.Cache/redisEnterprise/databases",
           "apiVersion": "2021-02-01-preview",
           "properties": {
@@ -215,8 +215,8 @@
             }
           },
           "dependsOn": [
-            "[resourceId(concat('Microsoft.Cache/redisEnterprise/',variables('acre_name_1')))]",
-            "[resourceId(concat('Microsoft.Cache/redisEnterprise/',variables('acre_name_2')))]"
+            "[resourceId('Microsoft.Cache/redisEnterprise/',variables('acre_name_1'))]",
+            "[resourceId('Microsoft.Cache/redisEnterprise/',variables('acre_name_2'))]"
           ],
           "tags": {}
         }
