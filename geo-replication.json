@@ -153,8 +153,8 @@
               "groupNickname": "[variables('geoReplicationGroupName')]",
               "linkedDatabases": [
                 {
-                  "id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/Microsoft.Cache/redisEnterprise/',variables('acre_name_1'),'/databases/default')]"
-                }
+                  "id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Cache/redisEnterprise/',variables('acre_name_1'),'/databases/default')]"
+                },
               ]
             },
             "persistence": {
@@ -203,7 +203,7 @@
               "groupNickname": "[variables('geoReplicationGroupName')]",
               "linkedDatabases": [
                 {
-                  "id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/Microsoft.Cache/redisEnterprise/',variables('acre_name_2'),'/databases/default')]"
+                  "id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Cache/redisEnterprise/',variables('acre_name_2'),'/databases/default')]"
                 }
               ]
             },
