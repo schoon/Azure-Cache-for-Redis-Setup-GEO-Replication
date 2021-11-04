@@ -150,12 +150,7 @@
             "evictionPolicy": "[parameters('evictionPolicy')]",
             "clusteringPolicy": "[parameters('clusterPolicy')]",
             "geoReplication": {
-              "groupNickname": "[variables('geoReplicationGroupName')]",
-              "linkedDatabases": [
-                {
-                  "id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Cache/redisEnterprise/',variables('acre_name_1'),'/databases/default')]"
-                }
-              ]
+              "groupNickname": "[variables('geoReplicationGroupName')]"
             },
             "persistence": {
               "aofEnabled": "false",
@@ -204,6 +199,9 @@
               "linkedDatabases": [
                 {
                   "id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Cache/redisEnterprise/',variables('acre_name_2'),'/databases/default')]"
+                },
+                {
+                  "id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Cache/redisEnterprise/',variables('acre_name_1'),'/databases/default')]"
                 }
               ]
             },
