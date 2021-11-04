@@ -11,6 +11,10 @@
 Deploy Azure Cache for Redis Enterprise (ACRE)
 in two separate regions with active geo-replication
 
+## See Also
+
+[acre-terraform-geo-replication](https://github.com/redisgeek/acre-terraform-geo-replication)
+
 ## Roadmap
 
 See the [open issues](https://github.com/redisgeek/acre-geo-replication/issues) for a list of proposed features (and known issues).
