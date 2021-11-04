@@ -120,22 +120,8 @@
   "variables": {
     "default":"/default",
     "geoReplicationGroupName": "[uniqueString(subscription().id)]",
-    "acre_name_1": "[concat(parameters('prefix'), parameters('location1'),uniqueString(subscription().id))]",
-    "acre_name_2": "[concat(parameters('prefix'), parameters('location2'),uniqueString(subscription().id))]",
-    "acre_1_db_id":"[concat('/subscriptions/',
-    subscription().id,
-    '/resourceGroups/',
-    resourceGroup().name,
-    '/providers/Microsoft.Cache/redisEnterprise/',
-    variables('acre_name_1'),
-    '/databases/default')]",
-    "acre_2_db_id":"[concat('/subscriptions/',
-    subscription().id,
-    '/resourceGroups/',
-    resourceGroup().name,
-    '/providers/Microsoft.Cache/redisEnterprise/',
-    variables('acre_name_2'),
-    '/databases/default')]"
+    "acre_1_db_id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/', resourceGroup().name,'/providers/Microsoft.Cache/redisEnterprise/',variables('acre_name_1'),'/databases/default')]",
+    "acre_2_db_id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/', resourceGroup().name,'/providers/Microsoft.Cache/redisEnterprise/',variables('acre_name_2'),'/databases/default')]"
   },
   "resources": [
     {
