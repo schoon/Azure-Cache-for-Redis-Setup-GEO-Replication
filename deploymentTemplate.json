@@ -127,8 +127,8 @@
   },
   "variables": {
     "geoReplicationGroupName": "[concat(parameters('prefix'),uniqueString(subscription().subscriptionId))]",
-    "acre_name_1": "[concat(parameters('prefix'),uniqueString(resourceGroup().name))]",
-    "acre_name_2": "[concat(parameters('prefix'),uniqueString(resourceGroup().name))]",
+    "acre_name_1": "[concat(parameters('prefix'),'1-',uniqueString(resourceGroup().id))]",
+    "acre_name_2": "[concat(parameters('prefix'),'2-',uniqueString(resourceGroup().id))]",
     "sku_name": "[concat(split(parameters('planAndCapacity'), '_')[0], '_', split(parameters('planAndCapacity'), '_')[1])]",
     "sku_capacity": "[split(parameters('planAndCapacity'), '_')[2]]"
   },
