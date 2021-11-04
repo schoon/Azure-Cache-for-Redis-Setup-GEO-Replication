@@ -4,7 +4,7 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fredisgeek%2Facre-geo-replication%2Fmain%2FARM%2Fgeo-replication.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fredisgeek%2Facre-geo-replication%2Fmain%2Fgeo-replication.json)
 
 ## Deploy Azure Cache for Redis Enterprise (ACRE) in two separate regions with active geo-replication
 
