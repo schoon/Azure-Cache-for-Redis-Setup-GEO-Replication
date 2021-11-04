@@ -153,7 +153,7 @@
               "groupNickname": "[variables('geoReplicationGroupName')]",
               "linkedDatabases": [
                 {
-                  "id": "[resourceId('Microsoft.Cache/redisEnterprise/databases',variables('acre_name_1'))]"
+                  "id": "[resourceId('Microsoft.Cache/redisEnterprise/databases',concat(variables('acre_name_1'),'/default'))]"
                 }
               ]
             },
@@ -203,7 +203,7 @@
               "groupNickname": "[variables('geoReplicationGroupName')]",
               "linkedDatabases": [
                 {
-                  "id": "[resourceId('Microsoft.Cache/redisEnterprise/databases',variables('acre_name_2'))]"
+                  "id": "[resourceId('Microsoft.Cache/redisEnterprise/databases',concat(variables('acre_name_2'),'/default'))]"
                 }
               ]
             },
