@@ -2,9 +2,44 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "planAndCapacity": {
+      "type": "string",
+      "defaultValue": "Enterprise_E10_2",
+      "allowedValues": [
+        "Enterprise_E10_2",
+        "Enterprise_E10_4",
+        "Enterprise_E10_6",
+        "Enterprise_E10_8",
+        "Enterprise_E10_10",
+        "Enterprise_E20_2",
+        "Enterprise_E20_4",
+        "Enterprise_E20_6",
+        "Enterprise_E20_8",
+        "Enterprise_E20_10",
+        "Enterprise_E50_2",
+        "Enterprise_E50_4",
+        "Enterprise_E50_6",
+        "Enterprise_E50_8",
+        "Enterprise_E50_10",
+        "Enterprise_E100_2",
+        "Enterprise_E100_4",
+        "Enterprise_E100_6",
+        "Enterprise_E100_8",
+        "Enterprise_E100_10",
+        "EnterpriseFlash_F300_3",
+        "EnterpriseFlash_F300_9",
+        "EnterpriseFlash_F700_3",
+        "EnterpriseFlash_F700_9",
+        "EnterpriseFlash_F1500_3",
+        "EnterpriseFlash_F1500_9"
+      ],
+      "metadata": {
+        "description": "Select the SKU and scale of the Redis cluster."
+      }
+    },
     "prefix": {
       "type": "string",
-      "defaultValue": "redisgeek",
+      "defaultValue": "redisgeek-",
       "minLength": 3,
       "maxLength": 11
     },
@@ -50,33 +85,6 @@
         "description": "Select another region for geo-replication"
       }
     },
-    "Plan": {
-      "type": "string",
-      "allowedValues": [
-        "Enterprise_E10",
-        "Enterprise_E20",
-        "Enterprise_E50",
-        "Enterprise_E100"
-      ],
-      "defaultValue": "Enterprise_E10",
-      "metadata": {
-        "description": "Select the plan"
-      }
-    },
-    "planCapacity": {
-      "type": "string",
-      "allowedValues": [
-        "2",
-        "4",
-        "6",
-        "8",
-        "10"
-      ],
-      "defaultValue": "2",
-      "metadata": {
-        "description": "Select the plan capacity"
-      }
-    },
     "evictionPolicy": {
       "type": "string",
       "allowedValues": [
@@ -118,9 +126,11 @@
     }
   },
   "variables": {
-    "geoReplicationGroupName": "[uniqueString(subscription().id)]",
-    "acre_name_1": "[concat(parameters('prefix'), parameters('Region1'),uniqueString(subscription().id))]",
-    "acre_name_2": "[concat(parameters('prefix'), parameters('Region2'),uniqueString(subscription().id))]"
+    "geoReplicationGroupName": "[concat(parameters('prefix'),uniqueString(subscription().subscriptionId))]",
+    "acre_name_1": "[concat(parameters('prefix'),uniqueString(resourceGroup().name))]",
+    "acre_name_2": "[concat(parameters('prefix'),uniqueString(resourceGroup().name))]",
+    "sku_name": "[concat(split(parameters('planAndCapacity'), '_')[0], '_', split(parameters('planAndCapacity'), '_')[1])]",
+    "sku_capacity": "[split(parameters('planAndCapacity'), '_')[2]]"
   },
   "resources": [
     {
@@ -131,8 +141,8 @@
       "location": "[parameters('Region1')]",
       "dependsOn": [],
       "sku": {
-        "name": "[parameters('Plan')]",
-        "capacity": "[parameters('planCapacity')]"
+        "name": "[variables('sku_name')]",
+        "capacity": "[variables('sku_capacity')]"
       },
       "zones": [
         "1",
@@ -159,9 +169,7 @@
             },
             "persistence": {
               "aofEnabled": "false",
-              "rdbEnabled": "false",
-              "aofFrequency": "1s",
-              "rdbFrequency": "1h"
+              "rdbEnabled": "false"
             }
           },
           "dependsOn": [
@@ -181,8 +189,8 @@
         "[resourceId('Microsoft.Cache/redisEnterprise', variables('acre_name_1'))]"
       ],
       "sku": {
-        "name": "[parameters('Plan')]",
-        "capacity": "[parameters('planCapacity')]"
+        "name": "[variables('sku_name')]",
+        "capacity": "[variables('sku_capacity')]"
       },
       "zones": [
         "1",
@@ -212,9 +220,7 @@
             },
             "persistence": {
               "aofEnabled": "false",
-              "rdbEnabled": "false",
-              "aofFrequency": "1s",
-              "rdbFrequency": "1h"
+              "rdbEnabled": "false"
             }
           },
           "dependsOn": [
