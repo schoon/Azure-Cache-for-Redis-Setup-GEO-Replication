@@ -155,7 +155,7 @@
                 {
                   "id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Cache/redisEnterprise/',variables('acre_name_1'),'/databases/default')]"
                 }
-              ],
+              ]
             },
             "persistence": {
               "aofEnabled": "false",
