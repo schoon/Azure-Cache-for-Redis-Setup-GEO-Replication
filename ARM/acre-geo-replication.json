@@ -8,7 +8,7 @@
       "minLength": 3,
       "maxLength": 11
     },
-    "location1": {
+    "Region1": {
       "type": "string",
       "defaultValue": "eastus2",
       "allowedValues": [
@@ -29,7 +29,7 @@
         "description": "Select region for geo-replication"
       }
     },
-    "location2": {
+    "Region2": {
       "type": "string",
       "defaultValue": "westus2",
       "allowedValues": [
@@ -50,7 +50,7 @@
         "description": "Select another region for geo-replication"
       }
     },
-    "acre_sku": {
+    "Plan": {
       "type": "string",
       "allowedValues": [
         "Enterprise_E10",
@@ -63,7 +63,7 @@
         "description": "Select the plan"
       }
     },
-    "acre_capacity": {
+    "planCapacity": {
       "type": "string",
       "allowedValues": [
         "2",
@@ -74,10 +74,10 @@
       ],
       "defaultValue": "2",
       "metadata": {
-        "description": "Select the plan size"
+        "description": "Select the plan capacity"
       }
     },
-    "acre_client_protocol": {
+    "evictionPolicy": {
       "type": "string",
       "allowedValues": [
         "AllKeysLFU",
@@ -94,7 +94,7 @@
         "description": "Eviction Policy"
       }
     },
-    "acre_eviction_policy": {
+    "clientEncryption": {
       "type": "string",
       "allowedValues": [
         "Encrypted",
@@ -105,7 +105,7 @@
         "description": "Client protocol"
       }
     },
-    "acre_cluster_policy": {
+    "clusterPolicy": {
       "type": "string",
       "allowedValues": [
         "EnterpriseCluster",
@@ -120,8 +120,8 @@
   "variables": {
     "default":"/default",
     "geoReplicationGroupName": "[uniqueString(subscription().id)]",
-    "acre_name_1": "[concat(parameters('prefix'), parameters('location1'),uniqueString(subscription().id))]",
-    "acre_name_2": "[concat(parameters('prefix'), parameters('location2'),uniqueString(subscription().id))]"
+    "acre_name_1": "[concat(parameters('prefix'), parameters('Region1'),uniqueString(subscription().id))]",
+    "acre_name_2": "[concat(parameters('prefix'), parameters('Region2'),uniqueString(subscription().id))]"
   },
   "resources": [
     {
@@ -129,11 +129,11 @@
       "type": "Microsoft.Cache/redisEnterprise",
       "apiVersion": "2021-02-01-preview",
       "properties": {},
-      "location": "[parameters('location1')]",
+      "location": "[parameters('Region1')]",
       "dependsOn": [],
       "sku": {
-        "name": "[parameters('acre_sku')]",
-        "capacity": "[parameters('acre_capacity')]"
+        "name": "[parameters('Plan')]",
+        "capacity": "[parameters('planCapacity')]"
       },
       "zones": [
         "1",
@@ -147,9 +147,9 @@
           "type": "Microsoft.Cache/redisEnterprise/databases",
           "apiVersion": "2021-02-01-preview",
           "properties": {
-            "clientProtocol": "[parameters('acre_client_protocol')]",
-            "evictionPolicy": "[parameters('acre_eviction_policy')]",
-            "clusteringPolicy": "[parameters('acre_cluster_policy')]",
+            "clientProtocol": "[parameters('clientEncryption')]",
+            "evictionPolicy": "[parameters('evictionPolicy')]",
+            "clusteringPolicy": "[parameters('clusterPolicy')]",
             "geoReplication": {
               "groupNickname": "[variables('geoReplicationGroupName')]",
               "linkedDatabases": [
@@ -177,13 +177,13 @@
       "type": "Microsoft.Cache/redisEnterprise",
       "apiVersion": "2021-02-01-preview",
       "properties": {},
-      "location": "[parameters('location2')]",
+      "location": "[parameters('Region2')]",
       "dependsOn": [
         "[resourceId('Microsoft.Cache/redisEnterprise', variables('acre_name_1'))]"
       ],
       "sku": {
-        "name": "[parameters('acre_sku')]",
-        "capacity": "[parameters('acre_capacity')]"
+        "name": "[parameters('Plan')]",
+        "capacity": "[parameters('Capacity')]"
       },
       "tags": {},
       "resources": [
@@ -192,9 +192,9 @@
           "type": "Microsoft.Cache/redisEnterprise/databases",
           "apiVersion": "2021-02-01-preview",
           "properties": {
-            "clientProtocol": "[parameters('acre_client_protocol')]",
-            "evictionPolicy": "[parameters('acre_eviction_policy')]",
-            "clusteringPolicy": "[parameters('acre_cluster_policy')]",
+            "clientProtocol": "[parameters('clientEncryption')]",
+            "evictionPolicy": "[parameters('evictionPolicy')]",
+            "clusteringPolicy": "[parameters('clusterPolicy')]",
             "geoReplication": {
               "groupNickname": "[variables('geoReplicationGroupName')]",
               "linkedDatabases": [
