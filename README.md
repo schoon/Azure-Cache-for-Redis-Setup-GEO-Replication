@@ -6,29 +6,10 @@
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fredisgeek%2Facre-geo-replication%2Fmain%2FARM%2Facre-geo-replication.json)
 
-# acre-geo-replication
 ## Deploy Azure Cache for Redis Enterprise (ACRE) in two separate regions with active geo-replication
 
 Deploy Azure Cache for Redis Enterprise (ACRE)
 in two separate regions with active geo-replication
-
-- _Tenant_
-  - _Subscription_
-    - _Service Principal_
-    - **Resource Group**
-      - **Storage Account**
-        - **Storage Container**
-      - **Redis Enterprise Cluster in Region 1**
-      - **Redis Enterprise Cluster in Region 2**
-      
-## | [Getting Started](#getting-started) | [See Also](#see-also)  | [License](#license) |
-   
-## Getting Started
-
-```bash
-  git clone https://github.com/redisgeek/acre-geo-replication
-  cd acre-geo-replication
-```
 
 ## Roadmap
 
