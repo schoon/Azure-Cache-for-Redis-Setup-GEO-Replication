@@ -150,7 +150,12 @@
             "evictionPolicy": "[parameters('evictionPolicy')]",
             "clusteringPolicy": "[parameters('clusterPolicy')]",
             "geoReplication": {
-              "groupNickname": "[variables('geoReplicationGroupName')]"
+              "groupNickname": "[variables('geoReplicationGroupName')]",
+              "linkedDatabases": [
+                {
+                  "id": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Cache/redisEnterprise/',variables('acre_name_1'),'/databases/default')]"
+                }
+              ],
             },
             "persistence": {
               "aofEnabled": "false",
@@ -160,7 +165,7 @@
             }
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Cache/redisEnterprise/',variables('acre_name_1'))]"
+            "[concat('Microsoft.Cache/redisEnterprise/',variables('acre_name_1'))]"
           ],
           "tags": {}
         }
@@ -213,8 +218,8 @@
             }
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Cache/redisEnterprise/',variables('acre_name_1'))]",
-            "[resourceId('Microsoft.Cache/redisEnterprise/',variables('acre_name_2'))]"
+            "[concat('Microsoft.Cache/redisEnterprise/',variables('acre_name_1'))]",
+            "[concat('Microsoft.Cache/redisEnterprise/',variables('acre_name_2'))]"
           ],
           "tags": {}
         }
