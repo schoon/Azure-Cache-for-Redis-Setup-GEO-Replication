@@ -183,7 +183,7 @@
       ],
       "sku": {
         "name": "[parameters('Plan')]",
-        "capacity": "[parameters('Capacity')]"
+        "capacity": "[parameters('planCapacity')]"
       },
       "tags": {},
       "resources": [
