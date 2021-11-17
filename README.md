@@ -13,8 +13,8 @@ in two separate regions with active geo-replication
 
 ## See Also
 
-[acre-terraform-geo-replication](https://github.com/redisgeek/acre-terraform-geo-replication)
-[acre-terraform-geo-replication-simple](https://github.com/redisgeek/acre-terraform-geo-replication-simple)
+- [acre-terraform-geo-replication](https://github.com/redisgeek/acre-terraform-geo-replication)
+- [acre-terraform-geo-replication-simple](https://github.com/redisgeek/acre-terraform-geo-replication-simple)
 
 ## Roadmap
 
